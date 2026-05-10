@@ -1,0 +1,28 @@
+services:
+  # 1. El Backend 
+  api_backend:
+    build: ./backend
+    container_name: cybersoc_api
+    ports:
+      - "5000:5000"
+    volumes:
+      # Esto es CLAVE: Mapeamos la carpeta de logs para que no se borren si el contenedor muere
+      - ./backend/logs:/app/logs
+    depends_on:
+      - database
+    environment:
+      # Le decimos a la API cómo encontrar la base de datos dentro de la red de Docker
+      - MONGO_URL=mongodb://database:27017/cybersoc
+
+  # 2. La Base de Datos 
+  database:
+    image: mongo:6.0
+    container_name: cybersoc_db
+    ports:
+      - "27017:27017"
+    volumes:
+      # Guardamos los datos físicamente para que persistan
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

@@ -1,0 +1,16 @@
+# Node y Dependencias
+node_modules/
+dist/
+.env
+
+# Python
+__pycache__/
+venv/
+*.pyc
+
+# Logs (Solo ignoramos los archivos de texto, no la carpeta en sí)
+backend/logs/*.log
+
+# Sistemas Operativos
+.DS_Store
+Thumbs.db
