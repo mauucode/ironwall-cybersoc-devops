@@ -1,27 +1,35 @@
 services:
-  # 1. El Backend 
+  # Landing Page Pública (Subred Pública en AWS)
+  frontend_public:
+    build: ./frontend-public
+    container_name: cybersoc_public_ui
+    ports:
+      - "80:80"
+
+  # Dashboard Privado (Subred Privada en AWS)
+  frontend_private:
+    build: ./frontend-private
+    container_name: cybersoc_private_ui
+    ports:
+      - "8080:80"
+
+  # API Backend
   api_backend:
     build: ./backend
     container_name: cybersoc_api
     ports:
       - "5000:5000"
     volumes:
-      # Esto es CLAVE: Mapeamos la carpeta de logs para que no se borren si el contenedor muere
       - ./backend/logs:/app/logs
     depends_on:
       - database
-    environment:
-      # Le decimos a la API cómo encontrar la base de datos dentro de la red de Docker
-      - MONGO_URL=mongodb://database:27017/cybersoc
-
-  # 2. La Base de Datos 
+    env_file:
+      - .env
+  # Base de Datos
   database:
     image: mongo:6.0
     container_name: cybersoc_db
-    ports:
-      - "27017:27017"
     volumes:
-      # Guardamos los datos físicamente para que persistan
       - mongo_data:/data/db
 
 volumes:
